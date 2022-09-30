@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <input type="text" id="input">
+    <span id="countdown"></span>
+
+    <script>
+
+        function saludo() {
+            console.log("Cambio!!");
+        }
+        document.querySelector("input").addEventListener("change", saludo);
+        function saludo22() {
+            let interval = setInterval(() => {
+                console.log("aqui");
+                clearInterval(interval);
+            }, 3000);
+        }
+
+
+        //-------
+        var totalTime = 2;
+
+        function updateClock() {
+            document.getElementById('countdown').innerHTML = totalTime;
+            if (totalTime == 0) {
+                console.log('Final');
+            } else {
+                totalTime -= 1;
+                setTimeout("updateClock()", 1000);
+            }
+        }
+
+    </script>
+</body>
+
+</html>
