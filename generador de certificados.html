@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8"
+        crossorigin="anonymous"></script>
+    <title>Prueba JSPDFs</title>
+</head>
+
+<body>
+    <script>
+        let pr = "qwerty";
+    </script>
+    <div style="text-align: center;margin-top: 10px; display: block;">
+        <a id="cert"
+            style="visibility: hidden;background-color: #4daf8f;color: white;border-radius: 20px;font-size: 17px;text-decoration: none;padding: 10px 45px"
+            onclick="saludo();"><b>Generar Certificado!</b></a>
+        <br>
+        <h2 id="mensaje1" style="margin-top: 20px;"></h2>
+        <br>
+        <a id="reinicio"
+            style="visibility: hidden;background-color: #4daf8f;color: white;border-radius: 20px;font-size: 17px;text-decoration: none;padding: 10px 45px"
+            href="http://localhost:8888/?page_id=609"><b>Volver</b></a>
+        <br>
+
+    </div>
+    <script>
+
+        window.jsPDF = window.jspdf.jsPDF;
+        console.log(pr);
+
+        var imagen = 'https://usuarioasf.github.io/UsuarioAsfi.github.io/certificados/certificado2.png';
+        let doc = new jsPDF("l", "mm", "letter");
+
+        let nombre;
+        let apellido;
+        let archivo;
+
+        function generarCertificado() {
+            document.getElementById("divdatos").style.display = "none";
+            document.getElementById("divcertificado").style.display = "block";
+            // datos para el certificado:
+            nombre = "Jhon MichaEl rojAs Poma";
+            var palabras = nombre.split(" ");
+            for (let i = 0; i < palabras.length; i++) {
+                palabras[i] = palabras[i][0].toUpperCase() + (palabras[i].substr(1)).toLowerCase();
+            }
+            //nombre--------------------------------
+            var nombre = palabras.join(" ") || nombre;
+            let tam = ((nombre.length / 2) * 10);
+            let px1 = (280 - tam) / 2;
+            console.log(px1);
+            let py1 = 115;
+            // fecha--------------------------------
+            var today = new Date();
+            var dia = today.getDate();
+            var mes = today.getMonth() + 1;
+            var mesx = "";
+            var anio = today.getFullYear();
+            switch (mes) {
+                case 1: mesx = "Enero"; break;
+                case 2: mesx = "Febrero"; break;
+                case 3: mesx = "Marzo"; break;
+                case 4: mesx = "Abril"; break;
+                case 5: mesx = "Mayo"; break;
+                case 6: mesx = "Junio"; break;
+                case 7: mesx = "Julio"; break;
+                case 8: mesx = "Agosto"; break;
+                case 9: mesx = "Septiembre"; break;
+                case 10: mesx = "Octubre"; break;
+                case 11: mesx = "Noviembre"; break;
+                case 12: mesx = "Diciembre"; break;
+                default: mesx = "Error"; break;
+            }
+            var fecha = "La Paz " + dia + " de " + mesx + " " + anio;
+            tam = ((fecha.length / 2) * 6);
+            console.log("tam: "+tam);
+            let px2 = (280 - tam) / 2;
+            let py2 = 200;
+            // mensaje--------------------------------
+            
+            
+            var titulo ="Ley 393 y los aportes a la educación financiera";
+            var mens= "Por completar el curso de "+titulo;
+            tam = ((mens.length / 2) * 6);
+            console.log("tam: "+tam);
+            let px3 = (280 - tam) / 2;
+            let py3 = 133;
+            
+            archivo = "certificado";
+
+            toDataURL(imagen, function (dataUrl) {
+
+
+                var width = doc.internal.pageSize.getWidth();
+                var height = doc.internal.pageSize.getHeight();
+                console.log(width + "   -   " + height);
+                doc.addImage(dataUrl, 0, 0, width, height, "alias1", "SLOW");
+                //doc.setFont("times", "italic", 400);
+                doc.setFontSize(32);
+                doc.setTextColor(0, 0, 0);
+                doc.setFont("times", "italic");
+                doc.text(nombre, px1, py1);
+                //fecha
+                console.log(fecha);
+                doc.setFontSize(20);
+                doc.setTextColor(0, 0, 0);
+                doc.setFont("times");
+                doc.text(fecha, px2, py2);
+                //mensaje
+                doc.text(mens, px3, py3);
+                document.getElementById('main-iframe').setAttribute('src', doc.output('bloburl'));
+
+                //doc.save(archivo + ".pdf");
+                console.log(doc);
+
+            });
+        }
+
+        function guardar() {
+            doc.save(archivo + ".pdf");
+        }
+
+        function toDataURL(url, callback) {
+            var xhr = new XMLHttpRequest();
+            xhr.onload = function () {
+                var reader = new FileReader();
+                reader.onloadend = function () {
+                    callback(reader.result);
+                }
+                reader.readAsDataURL(xhr.response);
+            };
+            xhr.open('GET', url);
+            xhr.responseType = 'blob';
+            xhr.send();
+        }
+
+        function saludo() {
+
+            var nota = "";
+            generarCertificado();
+            /*if (document.querySelector("#score") != null) {
+                nota = parseInt(document.querySelector("#score").innerText + "");
+                console.lo
+                if (nota > 50) {
+                    generarCertificado();
+                } else {
+                    document.getElementById("cert").style.visibility = "hidden";
+                    document.getElementById("mensaje1").innerText = "Debes aprobar el cuestionario primero :(";
+                    document.getElementById("reinicio").style.visibility = "visible";
+                }
+            }
+            else {
+                document.getElementById("cert").style.visibility = "hidden";
+                document.getElementById("mensaje1").innerText = "Primero debes resolver el cuestionario";
+            }*/
+            console.log("Nota: " + nota);
+        }
+        // cuenta regresiva
+        const buttonCert = document.getElementById('cert');
+
+        if (buttonCert != null) {
+            let interval = setInterval(() => {
+                buttonCert.style.visibility = 'visible';
+                clearInterval(interval);
+            }, 1000);
+        } else {
+            console.log("es nulo");
+        }
+
+    </script>
+
+    <div id="divdatos" class="container" style="display: none;">
+        <div class="row justify-content-around py-4">
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label for="input_name">Nombre</label>
+                    <input type="text" placeholder="Ingresa tu nombre" class="form-control" id="input_name">
+                </div>
+                <div class="form-group">
+                    <label for="input_apellido">Apellido</label>
+                    <input type="text" placeholder="Ingresa tus apellidos" class="form-control" id="input_apellido">
+                </div>
+                <div class="form-group">
+                    <input type="text" placeholder="Ingresa el nombre del archivo" class="form-control"
+                        id="input_filename">
+                </div>
+                <span class="btn btn-success" style="margin: auto;" onclick="generarCertificado();" id="btn_pdf">Genera
+                    PDF</span>
+            </div>
+        </div>
+
+    </div>
+    <div id="divcertificado" style="display: none;text-align: center;">
+        <div class="caja">
+            <iframe id="main-iframe"></iframe>
+        </div>
+        <span class="btn btn-danger" onclick="guardar();" id="btn_guardarpdf">Descargar PDF</span>
+    </div>
+
+    <style>
+        .caja {
+            margin: auto;
+            margin-top: 30px;
+
+            width: 85%;
+            height: 700px;
+        }
+
+        #main-iframe {
+            width: 100%;
+            height: 700px;
+            border: none;
+        }
+
+        @media only screen and (max-width:600px) {
+            .caja {
+                margin: auto;
+                margin-top: 30px;
+
+                width: 85%;
+                height: 350px;
+            }
+
+            #main-iframe {
+                width: 100%;
+                height: 350px;
+                border: none;
+            }
+        }
+    </style>
+
+</body>
+
+</html>
